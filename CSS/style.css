@@ -112,12 +112,28 @@ input {
 .hero-card h3 {
   margin: 0 0 0.35rem;
   font-size: 1.25rem;
+  animation: cuteBounce 0.9s ease-out both;
 }
 
 .hero-card p {
   margin: 0;
   color: #235683;
   line-height: 1.5;
+  animation: floatFade 1s ease-out 0.2s both;
+}
+
+.hero-card {
+  position: relative;
+}
+
+.hero-card::before {
+  content: '✨';
+  position: absolute;
+  top: -10px;
+  right: 18px;
+  font-size: 1.4rem;
+  opacity: 0;
+  animation: sparkle 1.1s ease-out 0.15s both;
 }
 
 .category-buttons {
@@ -436,6 +452,49 @@ input {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes cuteBounce {
+  0% {
+    transform: translateY(-26px) scale(0.92);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(8px) scale(1.08);
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(-4px) scale(0.98);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes floatFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.75);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-12px) scale(1);
   }
 }
 
