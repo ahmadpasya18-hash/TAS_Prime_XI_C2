@@ -37,6 +37,20 @@ function prettyQuantity(count) {
   return `${count} item${count !== 1 ? 's' : ''}`;
 }
 
+function normalizeImageUrl(url) {
+  if (!url) return '';
+  try {
+    const drivePattern = /https:\/\/drive\.google\.com\/file\/d\/([^/]+)\//;
+    const match = url.match(drivePattern);
+    if (match) {
+      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    }
+    return url;
+  } catch {
+    return url;
+  }
+}
+
 function updateCartUI() {
   cartList.innerHTML = '';
   if (cart.length === 0) {
@@ -86,7 +100,7 @@ function renderProducts(list) {
     const card = document.createElement('article');
     card.className = 'product-card';
     card.innerHTML = `
-      <img src="${product.produk_image}" alt="${product.produk_name}" loading="lazy" />
+      <img src="${normalizeImageUrl(product.produk_image)}" alt="${product.produk_name}" loading="lazy" />
       <h4>${product.produk_name}</h4>
       <p>${product.produk_category} • Stok ${product.produk_stock}</p>
       <div class="price-row">
@@ -108,7 +122,7 @@ function renderHomeProducts() {
     const card = document.createElement('article');
     card.className = 'product-card';
     card.innerHTML = `
-      <img src="${product.produk_image}" alt="${product.produk_name}" loading="lazy" />
+      <img src="${normalizeImageUrl(product.produk_image)}" alt="${product.produk_name}" loading="lazy" />
       <h4>${product.produk_name}</h4>
       <p>${product.produk_category} • Stok ${product.produk_stock}</p>
       <div class="price-row">
