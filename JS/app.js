@@ -1,4 +1,5 @@
 const productGrid = document.getElementById('productGrid');
+const homeProductGrid = document.getElementById('homeProductGrid');
 const cartList = document.getElementById('cartList');
 const cartTotal = document.getElementById('cartTotal');
 const historyList = document.getElementById('historyList');
@@ -14,6 +15,7 @@ const appShell = document.getElementById('appShell');
 let products = [];
 let cart = JSON.parse(localStorage.getItem('buSuryatiCart') || '[]');
 let history = JSON.parse(localStorage.getItem('buSuryatiHistory') || '[]');
+let currentCategory = 'all';
 
 function animateButton(element) {
   element.classList.add('pulse');
@@ -95,6 +97,28 @@ function renderProducts(list) {
   });
 }
 
+function renderHomeProducts() {
+  const filtered = currentCategory === 'all' ? products : products.filter(p => p.produk_category === currentCategory);
+  homeProductGrid.innerHTML = '';
+  if (!filtered.length) {
+    homeProductGrid.innerHTML = '<p class="empty-state">Tidak ada produk di kategori ini.</p>';
+    return;
+  }
+  filtered.slice(0, 6).forEach((product) => { // Show only first 6 for home
+    const card = document.createElement('article');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <img src="${product.produk_image}" alt="${product.produk_name}" loading="lazy" />
+      <h4>${product.produk_name}</h4>
+      <p>${product.produk_category} • Stok ${product.produk_stock}</p>
+      <div class="price-row">
+        <span class="price">${product.produk_price}</span>
+        <button class="primary-button pulse-on-click" data-action="add" data-id="${product.produk_id}">Tambah</button>
+      </div>`;
+    homeProductGrid.appendChild(card);
+  });
+}
+
 function addToCart(productId) {
   const product = products.find((item) => item.produk_id === productId);
   if (!product) return;
@@ -149,9 +173,11 @@ async function loadData() {
     products = await productRes.json();
     const mitra = await mitraRes.json();
     renderProducts(products);
+    renderHomeProducts();
     fillProfile(mitra[0]);
   } catch (error) {
     productGrid.innerHTML = '<p class="empty-state">Gagal memuat produk. Pastikan file JSON tersedia.</p>';
+    homeProductGrid.innerHTML = '<p class="empty-state">Gagal memuat produk.</p>';
     console.error(error);
   }
 }
@@ -180,6 +206,17 @@ function setupListeners() {
     animateButton(target);
     if (action === 'add') addToCart(id);
     if (action === 'remove') removeFromCart(id);
+  });
+
+  document.body.addEventListener('click', (event) => {
+    const categoryBtn = event.target.closest('.category-btn');
+    if (!categoryBtn) return;
+    const category = categoryBtn.dataset.category;
+    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+    categoryBtn.classList.add('active');
+    currentCategory = category;
+    renderHomeProducts();
+    animateButton(categoryBtn);
   });
 
   searchInput.addEventListener('input', () => {
