@@ -30,8 +30,14 @@
         <h3>Menu Pilihan Hari Ini</h3>
         <p>Soft blue, segar, dan mudah dipesan langsung lewat layar.</p>
       </div>
-      <div class="section-title">Selamat datang</div>
-      <p class="home-intro" style="margin: 0 20px 16px; color: #194a74;">Gunakan menu Produk untuk melihat daftar makanan dan minuman, lalu tambah ke keranjang dengan sentuhan manis.</p>
+      <div class="section-title">Kategori</div>
+      <div class="category-buttons">
+        <button class="category-btn pulse-on-click active" data-category="all">Semua</button>
+        <button class="category-btn pulse-on-click" data-category="Food">Makanan</button>
+        <button class="category-btn pulse-on-click" data-category="Beverage">Minuman</button>
+      </div>
+      <div class="section-title">Produk</div>
+      <div class="product-grid" id="homeProductGrid"></div>
     </section>
 
     <section class="page" data-page="products" id="productsPage">
